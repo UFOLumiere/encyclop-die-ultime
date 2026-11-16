@@ -1,1 +1,714 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shinobi Archives</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background: radial-gradient(circle at top, #292929, #090909 75%);
+  color: white;
+}
+
+header {
+  text-align: center;
+  padding: 25px 10px;
+}
+
+header h1 {
+  color: #e53935;
+  font-size: 38px;
+  margin: 0;
+  text-shadow: 0 0 15px #e53935;
+}
+
+header p {
+  color: #bbb;
+}
+
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 20px auto;
+}
+
+.stat {
+  background: #181818;
+  border: 1px solid #a52828;
+  border-radius: 12px;
+  padding: 15px 25px;
+  text-align: center;
+}
+
+.stat strong {
+  display: block;
+  color: #ff5555;
+  font-size: 24px;
+}
+
+.search-area {
+  max-width: 700px;
+  margin: 25px auto;
+}
+
+#search {
+  width: 100%;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #e53935;
+  background: #171717;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+.filters {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 25px auto;
+}
+
+.filters button {
+  background: #202020;
+  color: white;
+  border: 1px solid #a52828;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.filters button:hover,
+.filters button.active {
+  background: #b52222;
+  transform: translateY(-2px);
+}
+
+.sort-area {
+  text-align: center;
+  margin: 20px;
+}
+
+select {
+  padding: 10px;
+  background: #202020;
+  color: white;
+  border: 1px solid #a52828;
+  border-radius: 8px;
+}
+
+.section-title {
+  text-align: center;
+  color: #ff5555;
+  margin: 35px 0 20px;
+}
+
+#counter {
+  text-align: center;
+  color: #bbb;
+  margin: 15px;
+}
+
+.techniques {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 18px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.card {
+  background: linear-gradient(145deg, #202020, #111);
+  border: 1px solid #6d2424;
+  border-radius: 12px;
+  padding: 18px;
+  transition: 0.25s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: #ff4444;
+  box-shadow: 0 0 15px #8f202055;
+}
+
+.card h3 {
+  color: #ff5a5a;
+  margin-top: 0;
+}
+
+.category {
+  display: inline-block;
+  background: #692020;
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 12px;
+  margin-bottom: 10px;
+}
+
+.card p {
+  color: #ccc;
+  line-height: 1.5;
+}
+
+.chakra-label {
+  display: flex;
+  justify-content: space-between;
+  color: #ddd;
+  font-size: 13px;
+}
+
+.chakra-bar {
+  height: 9px;
+  background: #333;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 7px;
+}
+
+.chakra-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #a51e1e, #ff5555);
+}
+
+.mudras {
+  color: #e6b85c;
+  font-size: 13px;
+  margin-top: 12px;
+}
+
+.original {
+  color: #888;
+  font-size: 11px;
+  margin-top: 12px;
+}
+
+.empty {
+  text-align: center;
+  color: #aaa;
+  padding: 30px;
+  grid-column: 1 / -1;
+}
+
+.mudras-section {
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: 20px;
+  background: #171717;
+  border: 1px solid #762424;
+  border-radius: 12px;
+}
+
+.mudras-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 12px;
+  text-align: center;
+}
+
+.mudra-item {
+  background: #252525;
+  padding: 15px 5px;
+  border-radius: 8px;
+}
+
+.mudra-item strong {
+  display: block;
+  color: #e8b85a;
+  margin-bottom: 5px;
+}
+
+footer {
+  text-align: center;
+  color: #777;
+  padding: 30px 10px;
+  margin-top: 40px;
+  border-top: 1px solid #333;
+}
+
+@media(max-width: 600px) {
+  body {
+    padding: 10px;
+  }
+
+  header h1 {
+    font-size: 29px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>⚔️ SHINOBI ARCHIVES ⚔️</h1>
+  <p>La grande encyclopédie des techniques ninja</p>
+</header>
+
+<div class="stats">
+  <div class="stat">
+    <strong id="totalTechniques">0</strong>
+    Techniques
+  </div>
+  <div class="stat">
+    <strong id="totalCategories">10</strong>
+    Catégories
+  </div>
+  <div class="stat">
+    <strong>12</strong>
+    Mudras
+  </div>
+</div>
+
+<div class="search-area">
+  <input
+    type="text"
+    id="search"
+    placeholder="🔎 Rechercher une technique..."
+  >
+</div>
+
+<div class="filters" id="filters">
+  <button class="active" data-filter="Toutes">Toutes</button>
+  <button data-filter="Feu">🔥 Katon</button>
+  <button data-filter="Foudre">⚡ Raiton</button>
+  <button data-filter="Vent">🌪️ Fûton</button>
+  <button data-filter="Eau">💧 Suiton</button>
+  <button data-filter="Terre">🪨 Doton</button>
+  <button data-filter="Sceaux">🔴 Fûinjutsu</button>
+  <button data-filter="Ninjutsu">✨ Ninjutsu</button>
+  <button data-filter="Combat">🥋 Taijutsu</button>
+  <button data-filter="Illusions">👁️ Genjutsu</button>
+  <button data-filter="Pouvoirs oculaires">🔮 Dôjutsu</button>
+</div>
+
+<div class="sort-area">
+  <label for="sort">Trier les techniques : </label>
+  <select id="sort">
+    <option value="default">Ordre normal</option>
+    <option value="asc">Chakra croissant</option>
+    <option value="desc">Chakra décroissant</option>
+  </select>
+</div>
+
+<h2 class="section-title">📜 Encyclopédie des techniques</h2>
+
+<p id="counter">Chargement...</p>
+
+<div class="techniques" id="techniques"></div>
+
+<section class="mudras-section">
+  <h2 class="section-title">🐉 Les 12 mudras</h2>
+
+  <div class="mudras-grid">
+    <div class="mudra-item"><strong>🐀 Rat</strong>Nezumi</div>
+    <div class="mudra-item"><strong>🐂 Bœuf</strong>Ushi</div>
+    <div class="mudra-item"><strong>🐅 Tigre</strong>Tora</div>
+    <div class="mudra-item"><strong>🐇 Lièvre</strong>Usagi</div>
+    <div class="mudra-item"><strong>🐉 Dragon</strong>Tatsu</div>
+    <div class="mudra-item"><strong>🐍 Serpent</strong>Mi</div>
+    <div class="mudra-item"><strong>🐎 Cheval</strong>Uma</div>
+    <div class="mudra-item"><strong>🐑 Chèvre</strong>Hitsuji</div>
+    <div class="mudra-item"><strong>🐒 Singe</strong>Saru</div>
+    <div class="mudra-item"><strong>🐓 Coq</strong>Tori</div>
+    <div class="mudra-item"><strong>🐕 Chien</strong>Inu</div>
+    <div class="mudra-item"><strong>🐗 Sanglier</strong>Inoshishi</div>
+  </div>
+</section>
+
+<footer>
+  <p>SHINOBI ARCHIVES</p>
+  <p>Encyclopédie de techniques inspirées de l'univers Naruto.</p>
+  <p>Les techniques générées sont des créations originales non officielles.</p>
+</footer>
+
+<script>
+const categories = {
+  "Feu": {
+    icon: "🔥",
+    type: "Katon",
+    description: "Technique utilisant la nature de chakra du feu.",
+    modeles: [
+      "Boule de feu",
+      "Dragon de feu",
+      "Mur de flammes",
+      "Souffle ardent",
+      "Pluie de feu",
+      "Explosion flamboyante",
+      "Vague de flammes",
+      "Lance de feu",
+      "Tornade de feu",
+      "Barrière de flammes"
+    ]
+  },
+
+  "Foudre": {
+    icon: "⚡",
+    type: "Raiton",
+    description: "Technique utilisant la nature de chakra de la foudre.",
+    modeles: [
+      "Éclair perforant",
+      "Dragon électrique",
+      "Mur de foudre",
+      "Lance électrique",
+      "Rafale électrique",
+      "Orage destructeur",
+      "Champ électrique",
+      "Épée de foudre",
+      "Onde électrique",
+      "Prison électrique"
+    ]
+  },
+
+  "Vent": {
+    icon: "🌪️",
+    type: "Fûton",
+    description: "Technique utilisant la nature de chakra du vent.",
+    modeles: [
+      "Lame de vent",
+      "Tornade",
+      "Dragon de vent",
+      "Souffle tranchant",
+      "Mur de vent",
+      "Rafale aérienne",
+      "Vague de vent",
+      "Bourrasque",
+      "Tempête",
+      "Prison de vent"
+    ]
+  },
+
+  "Eau": {
+    icon: "💧",
+    type: "Suiton",
+    description: "Technique utilisant la nature de chakra de l'eau.",
+    modeles: [
+      "Dragon aqueux",
+      "Bulle d'eau",
+      "Mur d'eau",
+      "Vague géante",
+      "Prison aqueuse",
+      "Tir d'eau",
+      "Brouillard",
+      "Torrent",
+      "Cascade",
+      "Lance d'eau"
+    ]
+  },
+
+  "Terre": {
+    icon: "🪨",
+    type: "Doton",
+    description: "Technique utilisant la nature de chakra de la terre.",
+    modeles: [
+      "Mur de terre",
+      "Dragon de terre",
+      "Prison rocheuse",
+      "Pics de pierre",
+      "Dôme terrestre",
+      "Tremblement de terre",
+      "Rempart rocheux",
+      "Lance de pierre",
+      "Marécage",
+      "Armure de terre"
+    ]
+  },
+
+  "Sceaux": {
+    icon: "🔴",
+    type: "Fûinjutsu",
+    description: "Technique de scellement utilisant des formules et du chakra.",
+    modeles: [
+      "Sceau de protection",
+      "Sceau de verrouillage",
+      "Sceau de stockage",
+      "Sceau de restriction",
+      "Sceau de détection",
+      "Sceau de barrière",
+      "Sceau de libération",
+      "Sceau de confinement",
+      "Sceau de défense",
+      "Sceau de liaison"
+    ]
+  },
+
+  "Ninjutsu": {
+    icon: "✨",
+    type: "Ninjutsu",
+    description: "Technique ninja reposant sur le contrôle et la transformation du chakra.",
+    modeles: [
+      "Clone de chakra",
+      "Substitution",
+      "Transformation",
+      "Projection de chakra",
+      "Barrière de chakra",
+      "Onde de chakra",
+      "Armure de chakra",
+      "Fil de chakra",
+      "Sphère de chakra",
+      "Double de chakra"
+    ]
+  },
+
+  "Combat": {
+    icon: "🥋",
+    type: "Taijutsu",
+    description: "Technique de combat reposant principalement sur les capacités physiques.",
+    modeles: [
+      "Poing puissant",
+      "Coup tournoyant",
+      "Frappe aérienne",
+      "Enchaînement rapide",
+      "Balayage",
+      "Percussion",
+      "Déplacement éclair",
+      "Coup ascendant",
+      "Combo rapide",
+      "Frappe circulaire"
+    ]
+  },
+
+  "Illusions": {
+    icon: "👁️",
+    type: "Genjutsu",
+    description: "Technique d'illusion qui perturbe la perception de la cible.",
+    modeles: [
+      "Illusion des ombres",
+      "Vision trompeuse",
+      "Monde illusoire",
+      "Mirage",
+      "Illusion du brouillard",
+      "Prison illusoire",
+      "幻",
+      "Illusion des reflets",
+      "Cauchemar illusoire",
+      "Sortilège"
+    ]
+  },
+
+  "Pouvoirs oculaires": {
+    icon: "🔮",
+    type: "Dôjutsu",
+    description: "Pouvoir lié aux capacités spéciales des yeux.",
+    modeles: [
+      "Vision perçante",
+      "Regard révélateur",
+      "Vision du chakra",
+      "Œil protecteur",
+      "Perception accrue",
+      "Regard hypnotique",
+      "Vision distante",
+      "Œil de détection",
+      "Perception des mouvements",
+      "Vision spirituelle"
+    ]
+  }
+};
+
+const cibles = [
+  "du Dragon",
+  "des Ombres",
+  "du Phénix",
+  "du Tonnerre",
+  "du Démon",
+  "du Tigre",
+  "des Étoiles",
+  "du Serpent",
+  "du Corbeau",
+  "de la Lune",
+  "du Soleil",
+  "des Tempêtes",
+  "du Gardien",
+  "du Néant",
+  "de la Lumière",
+  "des Profondeurs",
+  "du Destin",
+  "de la Brume",
+  "des Cendres",
+  "du Crépuscule"
+];
+
+const qualites = [
+  "Suprême",
+  "Ancien",
+  "Mystérieux",
+  "Puissant",
+  "Ultime"
+];
+
+const nomsCategories = Object.keys(categories);
+
+const techniques = [];
+
+for (let i = 0; i < 10000; i++) {
+  const categorie = nomsCategories[Math.floor(i / 1000) % nomsCategories.length];
+  const info = categories[categorie];
+
+  const modele = info.modeles[Math.floor((i % 1000) / 100)];
+  const cible = cibles[i % cibles.length];
+  const qualite = qualites[i % qualites.length];
+
+  const chakra = 10000 + ((i * 7919) % 990001);
+
+  const nom = modele + " " + cible + " " + qualite;
+
+  const mudras = [
+    "🐀 Rat",
+    "🐂 Bœuf",
+    "🐅 Tigre",
+    "🐇 Lièvre",
+    "🐉 Dragon",
+    "🐍 Serpent",
+    "🐎 Cheval",
+    "🐑 Chèvre",
+    "🐒 Singe",
+    "🐓 Coq",
+    "🐕 Chien",
+    "🐗 Sanglier"
+  ];
+
+  const mudra1 = mudras[i % 12];
+  const mudra2 = mudras[(i + 3) % 12];
+  const mudra3 = mudras[(i + 6) % 12];
+
+  techniques.push({
+    nom,
+    categorie,
+    description: info.description,
+    icon: info.icon,
+    type: info.type,
+    chakra,
+    mudras: [mudra1, mudra2, mudra3]
+  });
+}
+
+document.getElementById("totalTechniques").textContent =
+  techniques.length.toLocaleString("fr-FR");
+
+let filtreActuel = "Toutes";
+
+function afficherTechniques() {
+  const recherche = document
+    .getElementById("search")
+    .value
+    .toLowerCase()
+    .trim();
+
+  const tri = document.getElementById("sort").value;
+
+  let resultat = techniques.filter(technique => {
+    const correspondFiltre =
+      filtreActuel === "Toutes" ||
+      technique.categorie === filtreActuel;
+
+    const texte = (
+      technique.nom + " " +
+      technique.categorie + " " +
+      technique.type + " " +
+      technique.description
+    ).toLowerCase();
+
+    return correspondFiltre && texte.includes(recherche);
+  });
+
+  if (tri === "asc") {
+    resultat.sort((a, b) => a.chakra - b.chakra);
+  }
+
+  if (tri === "desc") {
+    resultat.sort((a, b) => b.chakra - a.chakra);
+  }
+
+  document.getElementById("counter").textContent =
+    resultat.length.toLocaleString("fr-FR") +
+    " technique(s) trouvée(s)";
+
+  const conteneur = document.getElementById("techniques");
+
+  if (resultat.length === 0) {
+    conteneur.innerHTML =
+      '<div class="empty">Aucune technique trouvée.</div>';
+    return;
+  }
+
+  const limite = resultat.slice(0, 100);
+
+  conteneur.innerHTML = limite.map(technique => {
+    const pourcentage = (technique.chakra / 1000000) * 100;
+
+    return `
+      <article class="card">
+        <span class="category">
+          ${technique.icon} ${technique.type}
+        </span>
+
+        <h3>${technique.nom}</h3>
+
+        <p>${technique.description}</p>
+
+        <div class="chakra-label">
+          <span>Chakra estimé</span>
+          <strong>${technique.chakra.toLocaleString("fr-FR")}</strong>
+        </div>
+
+        <div class="chakra-bar">
+          <div
+            class="chakra-fill"
+            style="width:${pourcentage}%"
+          ></div>
+        </div>
+
+        <div class="mudras">
+          🐉 Mudras indicatifs : ${technique.mudras.join(" → ")}
+        </div>
+
+        <div class="original">
+          Création originale — Technique non officielle
+        </div>
+      </article>
+    `;
+  }).join("");
+}
+
+document.getElementById("search").addEventListener(
+  "input",
+  afficherTechniques
+);
+
+document.getElementById("sort").addEventListener(
+  "change",
+  afficherTechniques
+);
+
+document.querySelectorAll("#filters button").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("#filters button").forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    filtreActuel = button.dataset.filter;
+
+    afficherTechniques();
+  });
+});
+
+afficherTechniques();
+</script>
+
+</body>
+</html>
+
